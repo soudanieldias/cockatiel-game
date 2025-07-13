@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useGameStore } from '../store/gameStore';
+import { useSound } from '../hooks/useSound';
 
 const { width, height } = Dimensions.get('window');
 
@@ -17,12 +18,19 @@ export const GameHUD: React.FC = () => {
     setBetAmount,
   } = useGameStore();
 
+  const { playWhistle } = useSound();
+
   const betOptions = [10, 25, 50, 100, 250, 500];
 
   const handleBetChange = (amount: number) => {
     if (!running) {
       setBetAmount(amount);
     }
+  };
+
+  const handleWhistle = () => {
+    whistle();
+    playWhistle();
   };
 
   return (
@@ -93,7 +101,7 @@ export const GameHUD: React.FC = () => {
           <View style={styles.runningControls}>
             <TouchableOpacity
               style={[styles.button, styles.whistleButton]}
-              onPress={whistle}
+              onPress={handleWhistle}
             >
               <Text style={styles.buttonText}>🎵 Assobiar!</Text>
             </TouchableOpacity>
@@ -128,6 +136,7 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
     padding: 20,
+    paddingBottom: 40, // Adicionar padding extra para a barra de navegação
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },

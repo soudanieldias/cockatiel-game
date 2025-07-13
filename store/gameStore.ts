@@ -16,6 +16,10 @@ interface GameState {
   // Frases engraçadas
   currentPhrase: string;
   
+  // Callbacks de som
+  onWin?: () => void;
+  onLose?: () => void;
+  
   // Ações
   startGame: () => void;
   stopGame: () => void;
@@ -23,6 +27,7 @@ interface GameState {
   setBetAmount: (amount: number) => void;
   loadGame: () => Promise<void>;
   saveGame: () => Promise<void>;
+  setSoundCallbacks: (onWin: () => void, onLose: () => void) => void;
 }
 
 const funnyPhrases = [
@@ -58,11 +63,15 @@ export const useGameStore = create<GameState>((set, get) => ({
       return;
     }
     
+    // Descontar as sementes imediatamente ao iniciar o jogo
+    const newTotalSeeds = totalSeeds - betAmount;
+    
     set({ 
       running: true, 
       multiplier: 1,
       currentSeeds: 0,
       isFlying: true,
+      totalSeeds: newTotalSeeds,
       currentPhrase: "🦜 Vou voar alto!"
     });
     
@@ -92,15 +101,19 @@ export const useGameStore = create<GameState>((set, get) => ({
           currentPhrase: "🦜 Ops! Fugi voando!"
         });
         get().saveGame();
+        // Tocar som de derrota
+        const { onLose } = get();
+        if (onLose) onLose();
       }
     }, 100);
   },
   
   stopGame: () => {
-    const { running, currentSeeds, totalSeeds, betAmount } = get();
+    const { running, currentSeeds, totalSeeds, betAmount, onWin } = get();
     
     if (running) {
-      const newTotalSeeds = totalSeeds - betAmount + currentSeeds;
+      // Adicionar as sementes ganhas ao total atual
+      const newTotalSeeds = totalSeeds + currentSeeds;
       set({ 
         running: false, 
         isFlying: false,
@@ -108,6 +121,8 @@ export const useGameStore = create<GameState>((set, get) => ({
         currentPhrase: `🦜 Ganhei ${currentSeeds} sementes!`
       });
       get().saveGame();
+      // Tocar som de vitória
+      if (onWin) onWin();
     }
   },
   
@@ -116,12 +131,15 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (running) {
       const randomPhrase = funnyPhrases[Math.floor(Math.random() * funnyPhrases.length)];
       set({ currentPhrase: randomPhrase });
-      // playWhistle();
     }
   },
   
   setBetAmount: (amount: number) => {
     set({ betAmount: amount });
+  },
+  
+  setSoundCallbacks: (onWin: () => void, onLose: () => void) => {
+    set({ onWin, onLose });
   },
   
   loadGame: async () => {

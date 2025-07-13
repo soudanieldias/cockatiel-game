@@ -3,14 +3,23 @@ import { View, StyleSheet, StatusBar } from 'react-native';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { Calopsita } from '../components/Calopsita';
 import { GameHUD } from '../components/GameHUD';
+import { SoundToggle } from '../components/SoundToggle';
 import { useGameStore } from '../store/gameStore';
+import { useSound } from '../hooks/useSound';
 
 export const GameScreen: React.FC = () => {
-  const { loadGame } = useGameStore();
+  const { loadGame, setSoundCallbacks } = useGameStore();
+  const { playWin, playLose, startBackgroundMusic } = useSound();
 
   useEffect(() => {
     // Carregar dados salvos quando a tela for montada
     loadGame();
+    
+    // Configurar callbacks de som
+    setSoundCallbacks(playWin, playLose);
+    
+    // Iniciar música de background
+    startBackgroundMusic();
   }, []);
 
   return (
@@ -25,6 +34,9 @@ export const GameScreen: React.FC = () => {
       
       {/* Interface do jogo */}
       <GameHUD />
+      
+      {/* Controle de som */}
+      <SoundToggle />
     </View>
   );
 };

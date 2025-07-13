@@ -22,7 +22,7 @@ Uma paródia divertida do Jogo do Tigrinho, mas com uma calopsita fofa! 🎵
 - **TypeScript** para type safety
 - **Zustand** para gerenciamento de estado
 - **React Native Reanimated** para animações suaves
-- **Expo AV** para sons (opcional)
+- **Expo AV** para sons e música de background
 
 ## 🚀 Como Executar
 
@@ -50,6 +50,29 @@ Uma paródia divertida do Jogo do Tigrinho, mas com uma calopsita fofa! 🎵
 - ✅ **Fundo animado** com nuvens e sol
 - ✅ **Salvamento automático** do progresso
 - ✅ **Interface intuitiva** com HUD completo
+- ✅ **Sistema de som completo** com música de background e efeitos sonoros
+- ✅ **Controle de som** para ativar/desativar
+- ✅ **Desconto automático** de sementes ao iniciar o jogo
+
+## 🎵 Sistema de Som
+
+O jogo inclui um sistema completo de som com arquivos locais:
+
+### 🔊 **Música de Background**
+- Arquivo: `assets/sounds/background.mp3`
+- Toca automaticamente quando o jogo inicia
+- Loop contínuo durante o jogo
+- Volume controlado (30% do volume máximo)
+
+### 🎵 **Efeitos Sonoros**
+- **Assobio**: `assets/sounds/pew.mp3` - Toca quando você clica em "🎵 Assobiar!"
+- **Vitória**: `assets/sounds/pew.mp3` - Toca quando você para o jogo e ganha
+- **Derrota**: `assets/sounds/gameover.mp3` - Toca quando a calopsita foge
+
+### 🔇 **Controle de Som**
+- Botão no canto superior direito para ativar/desativar som
+- Ícone muda entre 🔊 (som ativo) e 🔇 (som desativado)
+- Labels informativos mostram o estado atual
 
 ## 🎨 Características Visuais
 
@@ -66,25 +89,36 @@ calopsita-jogo/
 ├── components/          # Componentes reutilizáveis
 │   ├── AnimatedBackground.tsx
 │   ├── Calopsita.tsx
-│   └── GameHUD.tsx
+│   ├── GameHUD.tsx
+│   └── SoundToggle.tsx
 ├── screens/            # Telas do app
 │   └── GameScreen.tsx
 ├── store/              # Gerenciamento de estado
 │   └── gameStore.ts
 ├── hooks/              # Hooks customizados
 │   └── useSound.ts
-├── assets/             # Recursos (sons, imagens)
+├── assets/             # Recursos
+│   └── sounds/         # Arquivos de som
+│       ├── background.mp3
+│       ├── pew.mp3
+│       └── gameover.mp3
 ├── App.tsx            # Componente principal
 └── README.md          # Este arquivo
 ```
 
-## 🎵 Sons (Opcional)
+## 🎵 Arquivos de Som
 
-O jogo inclui suporte para sons, mas por enquanto usa URLs externas. Para adicionar sons próprios:
+O jogo usa arquivos de som locais de alta qualidade:
 
-1. Adicione arquivos de áudio na pasta `assets/sounds/`
-2. Atualize o hook `useSound.ts` para usar os arquivos locais
-3. Use `require('../assets/sounds/seu-som.mp3')` em vez de URLs
+- **`background.mp3`** (968KB): Música de background em loop
+- **`pew.mp3`** (24KB): Som de assobio e vitória
+- **`gameover.mp3`** (108KB): Som de derrota quando a calopsita foge
+
+### 📊 **Configurações de Volume**
+- **Background**: 30% - Música suave de fundo
+- **Assobio**: 50% - Som claro de interação
+- **Vitória**: 70% - Som alegre de sucesso
+- **Derrota**: 60% - Som de game over
 
 ## 🚀 Próximas Funcionalidades
 
@@ -94,10 +128,10 @@ O jogo inclui suporte para sons, mas por enquanto usa URLs externas. Para adicio
 - [ ] **Sons personalizados** de assobio
 - [ ] **Modo offline** completo
 - [ ] **Temas visuais** diferentes
+- [ ] **Mais efeitos sonoros** (voo, bater de asas, etc.)
 
 ## 🐛 Problemas Conhecidos
 
-- Sons externos podem não funcionar em todos os dispositivos
 - Animações podem ser um pouco pesadas em dispositivos mais antigos
 
 ## 📄 Licença
